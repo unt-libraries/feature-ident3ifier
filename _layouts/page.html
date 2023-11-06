@@ -15,7 +15,7 @@ layout: default
 				</div>
 				<div class="list-group list-group-flush">
 					{% for project in site.projects %}
-					<a class="list-group-item" href="{{ project.url }}">{{ project.title }}</a>
+					<a class="list-group-item" href="{{ project.url | prepend: site.baseurl }}">{{ project.title }}</a>
 					{% endfor %}
 				</div>
 			</div>

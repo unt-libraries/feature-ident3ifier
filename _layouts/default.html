@@ -50,7 +50,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                   {% for project in site.projects %}
-                    <li><a class="dropdown-item" href="{{ project.url }}">{{ project.title }}</a></li>
+                    <li><a class="dropdown-item" href="{{ project.url | prepend: site.baseurl }}">{{ project.title }}</a></li>
                   {% endfor %}
                 </ul>
               </li>
