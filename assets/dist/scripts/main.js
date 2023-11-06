@@ -272,7 +272,7 @@ const $0a22ea1dd42efec1$export$43242bb6343d2f7e = ()=>{
    * navigating away from the current page.
    */ if (document.body.classList.contains("check-unload")) window.addEventListener("beforeunload", function(e) {
         e.preventDefault();
-        var confirmationMessage = $0a22ea1dd42efec1$var$config.message;
+        const confirmationMessage = $0a22ea1dd42efec1$var$config.message;
         e.returnValue = confirmationMessage;
         return confirmationMessage;
     });
@@ -1310,7 +1310,8 @@ class $b31daaec168ff7f7$export$372e2d09604f52f0 {
             "exportPaths": "button.export-paths",
             "dataElement": document.querySelector("#data-export"),
             "csvData": "",
-            "imgPaths": ""
+            "imgPaths": "",
+            "aubreyDomain": "https://texashistory.unt.edu"
         };
     }
     /**
@@ -1382,7 +1383,7 @@ class $b31daaec168ff7f7$export$372e2d09604f52f0 {
             entryIiifRotation = row.querySelector("td.entry_iiif_rotation").textContent;
             entryIiifMirror = row.querySelector("td.entry_iiif_mirror").textContent;
             entryIiifQuality = row.querySelector("td.entry_iiif_quality").textContent;
-            this.config.imgPaths += `/iiif/ark:/67531/${pagePath}/${entryIiifRegion}/${entryIiifSize}/${entryIiifMirror}${entryIiifRotation}/${entryIiifQuality}\n`;
+            this.config.imgPaths += `${this.config.aubreyDomain}/iiif/ark:/67531/${pagePath}/${entryIiifRegion}/${entryIiifSize}/${entryIiifMirror}${entryIiifRotation}/${entryIiifQuality}\n`;
         }
     };
     /**

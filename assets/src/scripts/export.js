@@ -6,6 +6,7 @@ export class exporter {
       "dataElement": document.querySelector("#data-export"),
       "csvData": "",
       "imgPaths": "",
+      "aubreyDomain" : "https://texashistory.unt.edu",
     }
   }
 
@@ -92,7 +93,7 @@ export class exporter {
       entryIiifRotation = row.querySelector('td.entry_iiif_rotation').textContent;
       entryIiifMirror = row.querySelector('td.entry_iiif_mirror').textContent;
       entryIiifQuality = row.querySelector('td.entry_iiif_quality').textContent;
-      this.config.imgPaths += `/iiif/ark:/67531/${pagePath}/${entryIiifRegion}/${entryIiifSize}/${entryIiifMirror}${entryIiifRotation}/${entryIiifQuality}\n`;
+      this.config.imgPaths += `${this.config.aubreyDomain}/iiif/ark:/67531/${pagePath}/${entryIiifRegion}/${entryIiifSize}/${entryIiifMirror}${entryIiifRotation}/${entryIiifQuality}\n`;
     }
   };
 
