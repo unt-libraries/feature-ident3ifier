@@ -1,0 +1,19 @@
+{
+  "name": "analysis",
+  "packageManager": "yarn@3.6.4",
+  "source": "assets/src/scripts/index.js",
+  "main": "assets/dist/scripts/main.js",
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "ow-leaflet-iiif": "^1.0.4"
+  },
+  "devDependencies": {
+    "@parcel/core": "^2.10.1",
+    "parcel": "^2.10.0",
+    "parcel-bundler": "^1.12.5"
+  },
+  "scripts": {
+    "watch": "parcel watch",
+    "build": "parcel build"
+  }
+}

@@ -1,0 +1,54 @@
+<div class="modal fade" 
+     id="modal-iiif-crop" 
+     tabindex="-1" 
+     aria-labelledby="modal-iiif-crop-label" 
+     aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between p-1">
+        <div class="d-flex justify-content-start">
+          <h2 class="modal-title fs-6" id="modal-iiif-crop-label">
+            Cropping and Labeling Tools
+          </h2>
+          <div class="dropdown">
+            <button class="btn btn-sm border-0 dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    data-bs-placement="right">
+                <span class="fad fa-brush fa-fw fa-lg text-primary"
+                      aria-hidden="true"
+                      data-bs-toggle="tooltip"
+                      data-bs-title="Options"></span>
+            </button>
+          
+            <ul id="color-scheme-dropdown"
+                class="dropdown-menu small" style="width:300px;">
+              <li class="p-2 text-muted small">
+                Select a color scheme below if it is difficult to see drawn regions.
+              </li>
+              <li class="dropdown-divider"></li>
+            </ul>
+          </div>
+        </div>
+        <span>
+          <button id="insert-data"
+                  type="button" 
+                  class="btn btn-sm btn-link link-success link-underline-opacity-0" 
+                  aria-label="Insert/Modify">
+            <span class="fa fa-check text-success fa-fw fa-lg"></span>
+            Apply
+          </button>
+          <button type="button" class="btn btn-sm btn-link link-danger link-underline-opacity-0" 
+                  data-bs-dismiss="modal" 
+                  aria-label="Close/Escape">
+            <span class="fa fa-xmark fa-fw text-danger fa-lg"></span>
+            Ignore
+          </button>
+        </span>
+      </div>
+      <div id="iiif-workspace" class="modal-body">
+      </div>
+    </div>
+  </div>
+</div>

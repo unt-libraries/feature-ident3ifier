@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ site.title }}</title>
+    {% for link in site.css_libraries %}
+    <link rel="stylesheet" 
+          type="text/css" 
+          href="{{ link.url }}"
+          {%- for attr in script.attributes -%}{{ attr[0] }}="{{ attr[1] }}" {%- endfor -%}>
+    {% endfor %}  
+  </head>
+  {% include head/styles.inline.html %}
+  <body class="{{ page.body_classes | default: template.body_classes }}">
+    {% include header/svg-symbols.html %}
+    <header>
+      <nav class="navbar navbar-expand-lg bg-primary"
+           data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" 
+             href="{{ site.baseurl }}">
+            {{ site.title }}
+          </a>
+          <button class="navbar-toggler" 
+                         type="button" 
+                         data-bs-toggle="collapse" 
+                         data-bs-target="#navbarNav" 
+                         aria-controls="navbarNav" 
+                         aria-expanded="false" 
+                         aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" 
+               id="navbarNav">
+            <ul class="navbar-nav ms-md-auto">
+              <li class="nav-item">
+                <a class="nav-link active" 
+                   aria-current="page" 
+                   href="{{ site.baseurl }}">Home</a>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" 
+                   href="#" 
+                   role="button" 
+                   data-bs-toggle="dropdown" 
+                   aria-expanded="false">
+                  Demos
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  {% for project in site.projects %}
+                    <li><a class="dropdown-item" href="{{ project.url }}">{{ project.title }}</a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+
+
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="container-fluid">
+      {{ content }}
+    </main>
+    <footer>
+      {% include iiif-crop.html %}
+    </footer>
+    {% for script in site.js_libraries.footer %}
+      <script src="{{ script.url}}" 
+              {%- for attr in script.attributes -%}{{ attr[0] }}="{{ attr[1] }}" {%- endfor -%}>
+      </script>
+    {% endfor %}
+
+    <script type="module" src="{{ '/assets/dist/scripts/main.js' | relative_url }}"></script>
+
+  </body>
+</html>

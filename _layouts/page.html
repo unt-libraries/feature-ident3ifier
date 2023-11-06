@@ -1,0 +1,24 @@
+---
+layout: default
+---
+
+<div class="container">
+	<h1 class="mt-4 border-bottom border-light pb-2">{{ page.title }}</h1>
+	<div class="row mt-4">
+		<div class="col-7">
+			{{ content }}
+		</div>
+		<div class="col-5">
+			<div class="card">
+				<div class="card-header">
+					Demos
+				</div>
+				<div class="list-group list-group-flush">
+					{% for project in site.projects %}
+					<a class="list-group-item" href="{{ project.url }}">{{ project.title }}</a>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

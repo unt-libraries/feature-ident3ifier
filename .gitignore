@@ -1,0 +1,12 @@
+_site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+.parcel-cache
+.yarn
+.vscode
+.pnp.cjs
+.pnp.loader.mjs
+node_modules
+vendor
+

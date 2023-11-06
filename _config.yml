@@ -1,0 +1,146 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+#
+# If you need help with YAML syntax, here are some quick references for you:
+# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
+# https://learnxinyminutes.com/docs/yaml/
+#
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+
+title: Feature Ident3ifer
+email: william.hicks@unt.edu
+description: >-
+  Pick ARK images, rotate, manipulate, annotate and export a list of images.
+
+domain: unt-libraries.github.io
+url: https://unt-libraries.github.io
+baseurl: /feature-ident3ifier/
+
+
+# Build settings
+theme: minima
+plugins:
+  - jekyll-feed
+
+link_base: https://texashistory.unt.edu
+
+css_libraries:
+  - url: https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css
+  - url: https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css
+  - url: https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.min.css
+
+js_libraries:
+  footer:
+    - url: https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js
+    - url: https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js
+    - url: https://kit.fontawesome.com/261a22fc18.js # limits to unt domains.
+      attributes:
+        - crossorigin: "anonymous"
+    - url: https://code.jquery.com/jquery-3.6.0.min.js
+    - url: https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js
+    - url: https://cdn.jsdelivr.net/npm/leaflet-iiif@3.0.0/leaflet-iiif.min.js
+    - url: https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.min.js
+
+
+# Set up specialized "annotation" buttons below each image in a dataset
+# to provide standardized notes about the images in exports. Due to
+# space limitations we reccomend no more than 4.
+# Each annotation should consist of:
+# - field: "string" # this value will be slugified and appears as the header of output csv.
+#   tooltip_text: "string" # a short value appearing to the user on hover describing the action
+#   icon_class: "fontawesome or other icon classes to render visual icon styles"
+#   data
+annotations:
+  - field: "has_difficult_text"
+    tooltip_text: "difficult script"
+    icon_classes: "far fa-signature"
+  - field: "typed_text"
+    tooltip_text: "typed text"
+    icon_classes: "far fa-keyboard"
+  - field: "numeric_math"
+    tooltip_text: "primarily numbers/math"
+    icon_classes: "far fa-calculator"
+  - field: "has_graphic_element"
+    tooltip_text: "image/graphic"
+    icon_classes: "far fa-image"
+  - field: "has_tabular_data"
+    tooltip_text: "tabular/form data"
+    icon_classes: "far fa-table"
+  - field: "has_colummns"
+    tooltip_text: "has columns"
+    icon_classes: "far fa-columns-3"
+  - field: "has_noise"
+    tooltip_text: "noise, damage, bleed"
+    icon_classes: "far fa-droplet"
+
+
+collections_dir: _collections
+
+collections:
+  projects:
+    output: true
+defaults:
+  - scope:
+      path: ""
+      type: "projects"
+
+defaults:
+  - scope:
+      type: "projects"
+    values:
+      layout: project
+      permalink: /:path/
+      body_classes: "check-unload"
+
+
+# Exclude from processing.
+# The following items will not be processed, by default.
+# Any item listed under the `exclude:` key here will be automatically added to
+# the internal "default list".
+#
+# Excluded items can be processed by explicitly listing the directories or
+# their entries' file path in the `include:` list.
+#
+exclude:
+exclude:
+  - "**/README.md"
+  - "*.gemspec"
+  - "*.gitkeep"
+  - "*.sublime-project"
+  - "*.sublime-workspace"
+  - ".idea/"
+  - "gulp/"
+  - .asset-cache
+  - .bundle
+  - .jekyll-cache/
+  - .sass-cache/
+  - CHANGELOG
+  - config
+  - CONTRIBUTING.md
+  - Gemfile
+  - Gemfile.lock
+  - gemfiles/
+  - gulpfile.js
+  - LICENSE
+  - log
+  - node_modules/
+  - package.json
+  - README
+  - README.md
+  - tmp
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - yarn.lock

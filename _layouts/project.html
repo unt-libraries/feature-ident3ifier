@@ -1,0 +1,541 @@
+---
+layout: default
+---
+
+{% if page.content %}
+  <div class="card my-4">
+    <div class="card-header">
+      {{ page.title }}
+    </div>
+    <div class="card-body">
+      {{ page.content }}
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+  <div class="col-9">
+    
+{% for entry in site.data[page.data] %}
+  {% assign slug = entry.aubrey_identifier|slugify %}
+  {% assign aubrey_manifestations = entry.aubrey_manifestations | plus: 0 %}
+  {% assign aubrey_filesets = entry.aubrey_filesets | plus: 0 %}
+  {% assign untl_collection = entry.untl_collection | split: ',' %}
+  {% assign untl_institution = entry.untl_institution | split: ',' %}
+
+
+  <div class="card mt-3">
+    <div class="card-header">
+      <h2 class="h6 mb-0">
+        <svg class="svg-inline--fa fa-arrow-up-right-from-square"
+             aria-hidden="true"
+             data-prefix="fad"
+             data-icon="arrow-up-right-from-square"
+             role="img"
+             xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 512 512"
+             data-fa-i2svg=""
+             width="16"
+             height="16">
+          <use xlink:href="#svg-arrow-up-right-from-square"></use>
+        </svg>
+        &nbsp;
+        <a href="{{ site.link_base }}/{{ entry.aubrey_identifier }}"
+           class="link underline link-underline-opacity-0" 
+           target="_blank">
+          {{ entry.display_title}}
+        </a>
+      </h2>
+    </div>
+    <div class="card-body">
+      <ul class="small mb-0">
+        <li>
+          <strong>ID:</strong>
+          <span class="badge text-bg-success">
+            {{ entry.aubrey_identifier | remove: "ark:/67531/" }}
+          </span>
+          <strong>Files:</strong>
+          <span class="badge text-bg-dark">
+            {{ aubrey_filesets }}
+          </span>
+          {% if entry.dc_type %}
+            <strong>Type: </strong>
+            <span class="series badge bg-secondary">
+              {{ entry.dc_type|default:"none" | remove: "text_" | remove: "image_" }}
+            </span>
+          {% endif %}
+          {% if entry.dc_language %}
+          <strong>Language: </strong>
+          <span class="series badge bg-info">
+            {{ entry.dc_language|default:"none" }}
+          </span>
+          {% endif %}
+          {% if entry.has_ocr_text %}
+          <strong>OCR: </strong>
+          <span class="series badge bg-danger">
+            {% if entry.has_ocr_text %}YES{% else %}NO{% endif %}
+          </span>
+          {% endif %}
+        </li>
+        {% if untl_collection or untl_institution or entry.str_title_serial %}            
+          <li>
+            {% if untl_collection %}
+              <strong>Collection(s):</strong>
+              {% for collection in untl_collection %}
+                <span class="badge text-bg-{% cycle "dark","primary" %}">
+                  {{ collection }}
+                </span>
+              {% else %}
+                <span class="badge text-bg-danger">
+                  none
+                </span>
+              {% endfor %}
+            {% endif %}
+            {% if untl_institution %}
+              <strong>Partner(s):</strong>
+              {% for institution in untl_institution %}
+                <span class="badge text-bg-{% cycle "success","warning" %}">
+                  {{ institution }}
+                </span>
+              {% else %}
+                <span class="badge text-bg-danger">
+                  none
+                </span>
+              {% endfor %}
+            {% endif %}
+          {% if entry.str_title_serial %}
+            <strong>Series Title: </strong>
+            <span class="series badge bg-info">
+            {% if entry.str_title_serial %}{{ entry.str_title_serial|replace: "\,", ","}}{% else %}none{% endif %}
+            </span>
+          {% endif %}
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="row py-3 border-bottom border-secondary-subtle">
+    {% if aubrey_manifestations == 1 %}
+      {% for i in (1..aubrey_filesets) %}
+        {% assign fileset_path = entry.aubrey_identifier| append:"/m1/"|append: i  %}
+        {% assign entry_id = entry.aubrey_identifier | remove: "ark:/67531/" | append: "/m1/" | append: i %}
+        {% assign link_fileset = site.link_base | append: "/" | append: fileset_path %}
+        {% assign link_iiif_fileset = site.link_base | append: "/iiif/" | append: fileset_path %}
+
+        <div class="item col-4 pb-2 border-bottom border-light mb-4 d-flex align-content-between flex-wrap"
+             style="max-width: 300px;"
+             id="item-{{ entry_id | slugify }}"
+             data-csv-controls="#row-{{ entry_id | slugify }}">
+          <div class="position-relative top-0">
+            <span class="btn-group small position-absolute top-0 start-0 z-3">
+              <button class="scroll-button btn btn-sm item-visual-fs-id py-1 bg-light border rounded-top-1 opacity-75"
+                    data-bs-toggle="tooltip"
+                    data-bs-title="Fileset # {{i}}">
+                {{ i }}
+              </button>
+              <button class="clone btn btn-sm btn-light py-1 rounded-end-1 opacity-75"
+                data-bs-title="duplicate"
+                data-bs-toggle="tooltip">
+                <svg class="svg-inline--fa fa-copy"
+                     aria-hidden="true"
+                     data-prefix="fad"
+                     data-icon="copy"
+                     role="img"
+                     xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 512 512"
+                     data-fa-i2svg=""
+                     width="16"
+                     height="16">
+                  <use xlink:href="#svg-copy"></use>
+                </svg>
+              </button>
+            </span> 
+            <span class="item-top-buttons position-absolute top-0 end-0 z-3">
+              <button type="button" 
+                      class="d-none btn btn-warning btn-sm"
+                      data-reset-state="initial"
+                      data-bs-toggle="tooltip"
+                      data-bs-title="reset image &amp; clear changes">
+                <svg class="svg-inline--fa fa-clock-rotate-left"
+                     aria-hidden="true"
+                     data-prefix="fad"
+                     data-icon="clock-rotate-left"
+                     role="img"
+                     xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 512 512"
+                     data-fa-i2svg=""
+                     width="16"
+                     height="16">
+                  <use xlink:href="#svg-clock-rotate-left"></use>
+                </svg>
+              </button>
+              <a href="{{ link_fileset }}/high_res/"
+                 class="external-preview btn btn-primary btn-sm"
+                 target="_blank">
+                <svg class="svg-inline--fa fa-up-right-and-down-left-from-center"
+                     aria-hidden="true"
+                     data-prefix="fad"
+                     data-icon="up-right-and-down-left-from-center"
+                     role="img"
+                     xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 512 512"
+                     data-fa-i2svg=""
+                     width="16"
+                     height="16">
+                  <use xlink:href="#svg-up-right-and-down-left-from-center"></use>
+                </svg>  
+              </a>
+            </span>
+            <a href="#" class="exclude link-danger link-opacity-10 link-opacity-100-hover w-100 position-absolute w-100 h-100 rounded-0 z-2">
+              <span class="position-absolute top-50 start-50 translate-middle">
+                Exclude
+              </span>
+            </a>
+            <img class="lazyload img-thumbnail img-fluid blur-up h-auto img-intrinsic"
+               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+               data-canoncial-small-src="{{ link_fileset }}/small_res/"
+               data-canonical-iiif-src="{{ link_iiif_fileset }}/full/max/0/default.jpg"
+               data-src="{{ link_fileset }}/small_res/"
+               data-iiif-src="{{ link_iiif_fileset }}/full/max/0/default.jpg"
+               data-iiif-info="{{ link_iiif_fileset }}/info.json" />
+          </div>
+          <div class="position-relative bottom-0">
+            <div class="input-group input-group-sm my-1 rounded-0">
+              <span data-bs-toggle="tooltip" 
+                  data-bs-title="Crop/Bonds. Note: make changes here 1st.">
+                <button class="btn btn-sm btn-success"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modal-iiif-crop">
+                  <svg class="svg-inline--fa fa-crop-simple text-white"
+                       aria-hidden="true"
+                       data-prefix="far"
+                       data-icon="crop-simple"
+                       role="img"
+                       xmlns="http://www.w3.org/2000/svg"
+                       viewBox="0 0 512 512"
+                       data-fa-i2svg=""
+                       width="16"
+                       height="16">
+                    <use xlink:href="#svg-crop-simple"></use>
+                  </svg>
+                </button>
+              </span>
+              <button class="btn btn-sm btn-dark"
+                  data-bs-toggle="tooltip"
+                  data-iiif-action="quality"
+                  data-bs-title="color/greyscale/bitonal">
+                <svg class="svg-inline--fa fa-circle-half-stroke"
+                     aria-hidden="true"
+                     data-prefix="far"
+                     data-icon="circle-half-stroke"
+                     role="img"
+                     xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 512 512"
+                     data-fa-i2svg=""
+                     width="16"
+                     height="16">
+                  <use xlink:href="#svg-circle-half-stroke"></use>
+                </svg>
+              </button>
+              <button class="flip-horizontal btn btn-sm btn-info"
+                  data-bs-toggle="tooltip" 
+                  data-bs-title="mirror">
+                <svg class="svg-inline--fa fa-file-import fa-flip"
+                     aria-hidden="true"
+                     data-prefix="far"
+                     data-icon="file-import"
+                     role="img"
+                     xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 512 512"
+                     data-fa-i2svg=""
+                     width="16"
+                     height="16"
+                     style="--fa-flip-y: 1; --fa-flip-x: 0; --fa-animation-duration: 3s; --fa-animation-iteration-count: 2;">
+                  <use xlink:href="#svg-file-import"></use>
+                </svg>
+              </button>
+              <button class="rotation-button btn btn-light border-secondary-subtle"
+                  data-rotation="0"
+                  data-bs-title="rotate 90&deg;"
+                  data-bs-toggle="tooltip">
+                <span class="far fa-rotate-right"></span>
+                  <svg class="svg-inline--fa fa-roate-right"
+                     aria-hidden="true"
+                     data-prefix="far"
+                     data-icon="roate-right"
+                     role="img"
+                     xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 512 512"
+                     data-fa-i2svg=""
+                     width="16"
+                     height="16">
+                  <use xlink:href="#svg-roate-right"></use>
+                </svg>
+              </button>
+              <span class="input-group-text">or</span>
+                <input type="number"
+                     min="0"
+                     max="355"
+                     step="5" 
+                       class="rotation-input form-control" 
+                       id=""
+                       value=""
+                       placeholder="N &deg;">                    
+            </div>
+            <div class="input-group rounded-0 d-flex my-1">
+              {% for annotation in site.annotations %}
+              <button class="annotation-button btn btn-sm btn-outline-secondary-subtle border-secondary-subtle flex-md-fill"
+                  data-bs-title="{{ annotation.tooltip_text}}"
+                  data-bs-toggle="tooltip"
+                  data-export-toggles=".entry_{{ annotation.field }}">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="icon"
+                     width="16"
+                     height="16"
+                     aria-hidden="true"
+                     role="img"
+                     viewBox="0 0 512 512"><use href="#svg-{{ annotation.field | slugify }}"></use></svg>
+              </button>
+              {% endfor %}
+            </div>
+            <div class="input-group my-1">
+              <input class="annotation-note form-control" 
+                     type="text"
+                     value=""
+                     data-export-toggles=".entry_notes"
+                     placeholder="notes/label">
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+    {% endif %}
+  </div>
+{% endfor %}
+  </div>
+
+  <div class="col-3">
+    <div class="sticky-top vh-100">
+      <div class="card mt-3 h-50">
+        <div class="card-header">
+          Data Preview
+        </div>
+        {% assign stats_count = 0 %}
+        <div class="table-responsive">
+          <table id="data-export"
+              class="table table-sm table-striped table-hover table-bordered font-monospace overflow-scroll">
+            <thead class="export-header">
+              <tr>
+                <th class="">&nbsp;</th>
+                <th class="exportable">entry_id</th>
+                <th class="exportable">manifest</th>
+                <th class="exportable">fileset</th>
+                <th class="exportable">dc_type</th>
+                <th class="exportable">dc_language</th>
+                <th class="exportable">has_ocr_text</th>
+                <th class="exportable">untl_collection</th>
+                <th class="exportable">untl_institution</th>
+                <th class="exportable">str_title_serial</th>
+                <th class="exportable">display_title</th>
+                {%- for annotation in site.annotations -%}
+                <th class="exportable">{{annotation.field}}</th>
+                {%- endfor -%}
+                <th class="exportable">notes</th>
+                <th class="exportable">included</th>
+                <th class="exportable">iiif_region</th>
+                <th class="exportable">iiif_size</th>
+                <th class="exportable">iiif_rotation</th>
+                <th class="exportable">iiif_mirror</th>
+                <th class="exportable">iiif_quality</th>
+                <th class="exportable">iiif_labeled_bounds</th>
+                <th class="exportable">clone_id</th>
+                <th class="exportable">is_modified</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              {% for entry in site.data[page.data] %}
+                {% assign slug = entry.aubrey_identifier|slugify %}
+                {% assign aubrey_manifestations = entry.aubrey_manifestations | plus: 0 %}
+                {% assign aubrey_filesets = entry.aubrey_filesets | plus: 0 %}
+                {% for i in (1..aubrey_filesets) %}
+                  {% assign entry_id = entry.aubrey_identifier | remove: "ark:/67531/" | append: "/m1/" | append: i %}
+                  {% assign entry_slug = entry_id | slugify %}
+                  {% assign stats_count = stats_count | plus:1 %}
+                  {% assign dc_type = entry.dc_type | default: 0 %}
+                  {% if dc_type != 0 %}
+                    {% assign dc_type = dc_type %}
+                  {% endif %}
+                  {% assign dc_language = entry.dc_language | default: 0 %}
+                  {% if dc_language != 0 %}
+                    {% assign dc_language = dc_language %}
+                  {% endif %}
+                  {% if entry.has_ocr_text %}
+                    {% assign has_ocr = 1 %}
+                  {% else %}
+                    {% assign has_ocr = 0 %}
+                  {% endif %}
+                  {% assign collections = entry.untl_collection %}
+                  {% assign partners = entry.untl_institution %}
+                  {% if entry.str_title_serial %}
+                    {% assign serial_title = entry.str_title_serial | replace: "\,", "," %}
+                  {% else %}
+                    {% assign serial_title = "" %}
+                  {% endif %}
+                  {% if entry.display_title %}
+                    {% assign display_title = entry.display_title | replace: "\,", "," %}
+                  {% else %}
+                    {% assign display_title = "" %}
+                  {% endif %}
+                  <tr class="entry"
+                      data-exportable="1"
+                      id="row-{{ entry_slug }}">
+                  {%- comment -%}visualization marker, no data{%- endcomment -%}
+                    <td>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true"
+                         role="img"
+                         width="16"
+                         height="16"
+                         class="icon text-success me-2 fa-fw svg-inline--fa">
+                      <use href="#svg-row-check"
+                           data-exportable="0"></use></svg>
+                    </td>
+                  {%- comment -%}string. ark, manifest, fileset path{%- endcomment -%}
+                    <td id="{{ entry_slug }}_id" 
+                        data-exportable="1"
+                          class="entry_id">{{ entry_id }}</td>
+                  {%- comment -%}int. manifest number{%- endcomment -%}
+                    <td class="entry_manifest" 
+                          data-exportable="1"
+                        data-initial-value="{{ aubrey_manifestations }}">{{ aubrey_manifestations }}</td>
+                  {%- comment -%}int. fileset number{%- endcomment -%}
+                    <td class="entry_fileset" 
+                          data-exportable="1"
+                        data-initial-value="{{ i }}">{{ i }}</td>
+                  {%- comment -%}string. resouce type code{%- endcomment -%}
+                    <td class="entry_dc_type" 
+                          data-exportable="1"
+                        data-initial-value="{{ dc_type | escape }}">{{ dc_type }}</td>
+                  {%- comment -%}string. 3 letter language code{%- endcomment -%}
+                    <td class="entry_dc_language" 
+                          data-exportable="1"
+                        data-initial-value="{{ dc_language | escape }}">{{ dc_language }}</td>
+                  {%- comment -%}boolean 1/0. has ocr{%- endcomment -%}
+                    <td class="entry_has_ocr_text" 
+                          data-exportable="1"
+                        data-initial-value="{{ has_ocr }}">{{ has_ocr }}</td>
+                  {%- comment -%}string. comma seperated list of collection IDs{%- endcomment -%}
+                    <td class="entry_untl_collection" 
+                          data-exportable="1"
+                        data-initial-value="{{ collections | escape }}">{{ collections }}</td>
+                  {%- comment -%}string. comma seperated list of partner IDs{%- endcomment -%}
+                    <td class="entry_untl_institution" 
+                          data-exportable="1"
+                        data-initial-value="{{ partners | escape }}">{{ partners }}</td>
+                  {%- comment -%}string. comma seperated list of serial titles{%- endcomment -%}
+                    <td class="entry_str_title_serial text-nowrap" 
+                          data-exportable="1"
+                        data-initial-value="{{ serial_title | escape }}">{{ serial_title }}</td>
+                  {%- comment -%}string. main display title{%- endcomment -%}
+                    <td class="entry_display_title text-nowrap" 
+                          data-exportable="1"
+                          data-initial-value="{{ display_title | escape }}">{{ display_title }}</td>
+                {%- for annotation in site.annotations -%}
+                  {%- comment -%}boolean 1/0. custom annotation notes{%- endcomment -%}
+                    <td class="entry_{{ annotation.field }}" 
+                          data-exportable="1"
+                          data-initial-value="0">0</td>
+                {%- endfor -%}
+                  {%- comment -%}string. custom text note{%- endcomment -%}
+                    <td class="entry_notes text-nowrap" 
+                          data-exportable="1"
+                          data-initial-value=""></td>
+                  {%- comment -%}boolean 1/0. marked as included or not{%- endcomment -%}
+                    <td class="entry_included" 
+                          data-exportable="1"
+                          data-initial-value="1">1</td>
+                  {%- comment -%}string. see iiif spec; typically full or a comma seperated list of bounds{%- endcomment -%}
+                    <td class="iiif-element entry_iiif_region text-nowrap" 
+                          data-exportable="1"
+                          data-initial-value="full">full</td>
+                  {%- comment -%}string. iif size.{%- endcomment -%}
+                    <td class="iiif-element entry_iiif_size" 
+                          data-exportable="1"
+                          data-initial-value="max">max</td>
+                  {%- comment -%}int. iiif rotation{%- endcomment -%}
+                    <td class="iiif-element entry_iiif_rotation" 
+                          data-exportable="1"
+                          data-initial-value="0">0</td>
+                  {%- comment -%}string. iiif inverse rotation with "!"{%- endcomment -%}
+                    <td class="iiif-element entry_iiif_mirror" 
+                          data-exportable="1"
+                          data-initial-value=""></td>
+                  {%- comment -%}int. iiif color quality value{%- endcomment -%}
+                    <td class="iiif-element entry_iiif_quality" 
+                          data-exportable="1"
+                          data-initial-value="default.jpg">default.jpg</td>
+                  {%- comment -%}int. iiif color labeled bounds{%- endcomment -%}
+                    <td class="iiif-element entry_iiif_labeled_bounds text-nowrap" 
+                          data-exportable="1"
+                          data-initial-value=""></td>
+                  {%- comment -%}string. If cloned, unique generated ID.{%- endcomment -%}
+                    <td class="entry_clone_id"
+                        data-exportable="1"></td>
+                  {%- comment -%}boolean 1/0. convenience marker for later image processing indicating if image has any iiif modifiers (1) or is unchanged original (0){%- endcomment -%}
+                    <td class="entry_is_modified"
+                          data-exportable="1"
+                        data-initial-value="0">0</td>
+                  </tr>
+                {% endfor %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="mt-3 d-grid">
+        <button class="btn btn-sm btn-dark d-block"
+                data-bs-toggle="tooltip"
+                data-bs-title="Remove Excluded Images from Preview"
+                id="toggle-exclude-visibility">
+          <span id="toggle-exclude-state">Hide</span>
+          <span id="toggle-exclude-count">0</span> Excluded
+        </button>
+      </div>
+      <div class="mt-3 d-grid">
+        <button class="export-data btn btn-sm btn-success d-block">
+          <svg class="svg-inline--fa fa-file-csv fa-fw"
+               aria-hidden="true"
+               data-prefix="fas"
+               data-icon="file-csv"
+               role="img"
+               xmlns="http://www.w3.org/2000/svg"
+               viewBox="0 0 512 512"
+               data-fa-i2svg=""
+               width="16"
+               height="16">
+            <use xlink:href="#svg-file-csv"></use>
+          </svg>          
+          Export <span class="stats-count">{{ stats_count }}</span> Rows
+        </button>
+      </div>
+      <div class="mt-3 d-grid">
+        <button class="export-paths btn btn-sm btn-info d-block">
+          <svg class="svg-inline--fa fa-images"
+               aria-hidden="true"
+               data-prefix="fas"
+               data-icon="images"
+               role="img"
+               xmlns="http://www.w3.org/2000/svg"
+               viewBox="0 0 576 512"
+               data-fa-i2svg=""
+               width="16"
+               height="16">
+            <use xlink:href="#svg-images"></use>
+          </svg>          
+          Export <span class="stats-count">{{ stats_count }}</span> Image Paths
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
